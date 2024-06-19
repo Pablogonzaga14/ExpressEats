@@ -26,7 +26,10 @@ public class Form_Login extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        //iniciando o componente
         IniciarComponentes();
+
+        //passando onclicklistener para o metodo
         txtCriarConta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,7 +39,7 @@ public class Form_Login extends AppCompatActivity {
 
         });
     }
-
+//passando o id para o componente
     public void IniciarComponentes(){
         txtCriarConta =findViewById(R.id.txtCriarConta);
     }
