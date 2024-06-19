@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true">
+
+
+<LinearLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:orientation="vertical"
@@ -23,6 +29,9 @@
         android:layout_height="wrap_content"
         android:hint="E-mail"
         android:padding="15dp"
+        android:maxLines="1"
+        android:inputType="textEmailAddress"
+        android:background="@drawable/edit_text_shape"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
@@ -34,6 +43,9 @@
         android:layout_height="wrap_content"
         android:hint="Senha"
         android:padding="15dp"
+        android:maxLines="1"
+        android:inputType="textPassword"
+        android:background="@drawable/edit_text_shape"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="10dp"
@@ -43,7 +55,7 @@
         android:id="@+id/mensagemErro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Preencha todos os campos"
+        android:text=""
         android:textColor="@color/red"
         android:textSize="16sp"
         android:layout_marginStart="20dp"
@@ -78,6 +90,8 @@
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:indeterminateTint="@color/red"
+        android:visibility="invisible"
         />
 
 </LinearLayout>
+</androidx.core.widget.NestedScrollView>
