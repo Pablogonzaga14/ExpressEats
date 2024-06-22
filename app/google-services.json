@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "411871869965",
+    "project_id": "expresseats-2fec8",
+    "storage_bucket": "expresseats-2fec8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411871869965:android:fc8c312199459a23996944",
+        "android_client_info": {
+          "package_name": "com.example.expresseats"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5gng5rdnMTZkiTPBZ99F-ocon0lTj_60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
