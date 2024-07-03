@@ -1,25 +1,40 @@
 package com.example.expresseats;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -28,6 +43,8 @@ public class Form_Cadastro extends AppCompatActivity {
     private Button btSelectPhoto, btRegister;
     private EditText editName,editEmail,editePassword;
     private TextView msgError;
+
+    private Uri mSelectUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +67,13 @@ public class Form_Cadastro extends AppCompatActivity {
                 cadastrarUsuaio(v);
             }
         });
+        //criando botao para selecionar imagem do usuario
+        btSelectPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectPhotoGalery();
+            }
+        });
     }
     //Metodo para cadastrar novos usuarios baseado em email e senha. Aqui recuperamos email e senha
     public void cadastrarUsuaio(View view){
@@ -61,6 +85,7 @@ public class Form_Cadastro extends AppCompatActivity {
             //caso o cadastro seja bem sucedido enviara uma mensagem para o usuario com um botão para finalizar a pagina atual
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
+                    SaveDataUsers();
                     //uma barra que podemos personalizar mais livremente e criamos um botão dentro dessa barra
                     Snackbar snackbar = Snackbar.make(view,"Cadastro realizado com sucesso",Snackbar.LENGTH_INDEFINITE)
                             .setAction("OK", new View.OnClickListener() {
@@ -74,6 +99,57 @@ public class Form_Cadastro extends AppCompatActivity {
             }
         });
     }
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == AppCompatActivity.RESULT_OK){
+                        Intent data = result.getData();
+                        mSelectUri = data.getData();
+
+                        try {
+                            photoUser.setImageURI(mSelectUri);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+    );
+    public void selectPhotoGalery(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        activityResultLauncher.launch(intent);
+    }
+
+    public void SaveDataUsers(){
+        String nomeArquivo = UUID.randomUUID().toString();
+        final StorageReference reference = FirebaseStorage.getInstance().getReference("/image/"+nomeArquivo);
+        reference.putFile(mSelectUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Log.i("Url_Img",uri.toString());
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
+
     public void InciarCompronentes(){
         photoUser = findViewById(R.id.photoUser);
         btSelectPhoto = findViewById(R.id.selectPhoto);
