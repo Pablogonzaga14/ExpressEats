@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -22,13 +21,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.auth.api.signin.internal.Storage;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -61,41 +56,23 @@ public class Form_Cadastro extends AppCompatActivity {
         editEmail.addTextChangedListener(cadastroTextWatcher);
         editePassword.addTextChangedListener(cadastroTextWatcher);
 
-        btRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cadastrarUsuaio(v);
-            }
-        });
+        btRegister.setOnClickListener(v -> cadastrarUsuaio(v));
         //criando botao para selecionar imagem do usuario
-        btSelectPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectPhotoGalery();
-            }
-        });
+        btSelectPhoto.setOnClickListener(v -> selectPhotoGalery());
     }
     //Metodo para cadastrar novos usuarios baseado em email e senha. Aqui recuperamos email e senha
     public void cadastrarUsuaio(View view){
         String email = editEmail.getText().toString();
         String password = editePassword.getText().toString();
 //conectamos nosso app com o firebase para poder enviar os dados para o banco de dados
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            //caso o cadastro seja bem sucedido enviara uma mensagem para o usuario com um botão para finalizar a pagina atual
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    SaveDataUsers();
-                    //uma barra que podemos personalizar mais livremente e criamos um botão dentro dessa barra
-                    Snackbar snackbar = Snackbar.make(view,"Cadastro realizado com sucesso",Snackbar.LENGTH_INDEFINITE)
-                            .setAction("OK", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    finish();
-                                }
-                            });
-                    snackbar.show();
-                }
+        //caso o cadastro seja bem sucedido enviara uma mensagem para o usuario com um botão para finalizar a pagina atual
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                SaveDataUsers();
+                //uma barra que podemos personalizar mais livremente e criamos um botão dentro dessa barra
+                Snackbar snackbar = Snackbar.make(view,"Cadastro realizado com sucesso",Snackbar.LENGTH_INDEFINITE)
+                        .setAction("OK", v -> finish());
+                snackbar.show();
             }
         });
     }
@@ -106,6 +83,7 @@ public class Form_Cadastro extends AppCompatActivity {
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == AppCompatActivity.RESULT_OK){
                         Intent data = result.getData();
+                        assert data != null;
                         mSelectUri = data.getData();
 
                         try {
@@ -124,6 +102,7 @@ public class Form_Cadastro extends AppCompatActivity {
     }
 
     public void SaveDataUsers(){
+        //randomiza os nomes salvos no banco
         String nomeArquivo = UUID.randomUUID().toString();
         final StorageReference reference = FirebaseStorage.getInstance().getReference("/image/"+nomeArquivo);
         reference.putFile(mSelectUri)
