@@ -25,10 +25,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -40,6 +44,7 @@ public class Form_Cadastro extends AppCompatActivity {
     private TextView msgError;
 
     private Uri mSelectUri;
+    private String usuarioID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +117,29 @@ public class Form_Cadastro extends AppCompatActivity {
                         reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-                                Log.i("Url_Img",uri.toString());
+
+                                String foto = uri.toString();
+                                //Iniciar o banco de dados - FireStore
+                                String nome = editName.getText().toString();
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                Map<String,Object> usuarios = new HashMap<>();
+                                usuarios.put("nome",nome);
+                                usuarios.put("foto",foto);
+
+                                usuarioID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                                DocumentReference documentReference = db.collection("Usuarios").document(usuarioID);
+                                documentReference.set(usuarios).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+                                    }
+                                });
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
