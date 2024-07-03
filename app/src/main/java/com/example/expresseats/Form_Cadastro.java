@@ -119,23 +119,30 @@ public class Form_Cadastro extends AppCompatActivity {
                             public void onSuccess(Uri uri) {
 
                                 String foto = uri.toString();
-                                //Iniciar o banco de dados - FireStore
+                                //recebendo o nome do usuario
                                 String nome = editName.getText().toString();
+                                //Iniciar o banco de dados - FireStore
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                //um mapa onde conseguimos recuperar depois os dados nome e foto
                                 Map<String,Object> usuarios = new HashMap<>();
                                 usuarios.put("nome",nome);
                                 usuarios.put("foto",foto);
-
+                                //passando a autenticação, o usuario atual e o id de cada usuario
                                 usuarioID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+                                //criando uma coleção de usuarios com base no nosso usuarioID que tem todos os atributos, garantindo que
+                                // nenhum usuario será duplicado ou substituido
                                 DocumentReference documentReference = db.collection("Usuarios").document(usuarioID);
+                                //setando nosso mapa para nossa coleção
                                 documentReference.set(usuarios).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
+                                    //caso seja um suceço faça algo
                                     public void onSuccess(Void unused) {
 
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
+                                    //caso seja uma falha faça algo
                                     public void onFailure(@NonNull Exception e) {
 
                                     }
