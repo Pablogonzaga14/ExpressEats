@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Perfil_Usuario">
+    
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/fotoUsuario"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@color/black"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        />
+
+    <TextView
+        android:id="@+id/nomeUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pablo Gonzaga"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        />
+
+    <TextView
+        android:id="@+id/emailUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="pablogonzaga@gmail.com"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        />
+
+    <Button
+        android:id="@+id/btEditPerfil"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" Edit profile"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:padding="15dp"
+        android:layout_margin="20dp"
+        android:background="@android:color/holo_blue_dark"
+        />
+
+
+
+</LinearLayout>
+</androidx.core.widget.NestedScrollView>

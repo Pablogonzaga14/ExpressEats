@@ -1,9 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.ExpressEats" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Base.Theme.ExpressEats" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
         <item name="android:statusBarColor">@color/red</item>
+        <item name="android:colorPrimary">@color/red</item>
     </style>
 
     <style name="Theme.ExpressEats" parent="Base.Theme.ExpressEats" />

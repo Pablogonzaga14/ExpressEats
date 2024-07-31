@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Form_Login extends AppCompatActivity {
 
@@ -33,6 +34,7 @@ public class Form_Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_form_login);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -88,6 +90,14 @@ public class Form_Login extends AppCompatActivity {
                         }
                     },3000);
 
+                }else {
+                    String erro;
+                    try {
+                        throw task.getException();
+                    }catch (Exception e){
+                        erro = "Erro ao logar usuário!";
+                    }
+                    mensagemErro.setText(erro);
                 }
             }
         });
@@ -99,6 +109,17 @@ public class Form_Login extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    //metodo para verificar se o usuario está logado
+    protected void onStart(){
+        super.onStart();
+        FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(usuarioAtual != null){
+           IniciarTelaDeProdutos();
+        }
+    }
+
 //passando o id para o componente
     public void IniciarComponentes(){
         txtCriarConta =findViewById(R.id.txtCriarConta);
